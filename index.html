@@ -1,0 +1,160 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
+    <style>
+        #navi {
+            background-color:black ;
+            height: 100px;
+        }
+        #first {
+            color: rgb(64, 64, 255); font-family: 'Courier New', Courier, monospace; font-size: 40px; padding: 30px;
+        }
+        form {margin: 25px; display: flex; justify-content: center;}
+        #city {border-radius: 50px; padding: 15px;}
+        @media only screen and (max-width: 772px) {
+    
+         .menu {
+           position: absolute;
+           box-sizing: border-box;
+           width: 300px;
+           left: -300px;
+           top: 0;
+           margin: -20px;
+           padding: 75px 50px 50px;
+           background: #d4af37;
+           -webkit-font-smoothing: antialiased;
+           transform-origin: 0% 0%;
+           transform: translateX(0%);
+           transition: transform 0.5s cubic-bezier(0.77, 0.2, 0.05, 1.0);
+         }
+        }
+
+        .main{
+          display: flex;
+          flex-wrap: wrap;
+          justify-content: space-around;
+          margin-top: 100px;
+        }
+        .Prayers{
+          display: flex;
+          justify-content: space-between;
+          border: 2px outset rgb(64, 64, 255);
+          border-radius: 15px;
+          width: 320px;
+          padding: 15px;
+          margin: 10px;
+          font-weight: 700;
+          font-family: monospace;
+          font-size: 18px;
+        }
+
+        .times{
+          color: black;
+        }
+        #date{
+          display: flex;
+          justify-content: center;
+          font-size: 25px;
+          color: rgb(22, 22, 22);
+          font-family: 'Courier New', Courier, monospace;
+          padding-top: 30px;
+        }
+    </style>
+</head>
+<body>
+    <nav id="navi">
+        <h1 id="first">Namaz Timings</h1>
+    </nav>   
+         
+    <form onsubmit="getData(); return false">
+            
+        <input type="text" placeholder="Enter your city name" id="city">
+            
+    </form>
+
+           
+    <div id="date"></div>
+
+        
+    <div class="main">
+            
+        <div id="main1">
+            <div id="fajr" class="Prayers">
+                <p>Fajr</p>
+                <p id="fajr-time" class="times"></p>
+            </div>
+            <div id="sunrise" class="Prayers">
+                <p>Sunrise</p>
+                <p id="sunrise-time" class="times"></p>
+            </div>
+            <div id="zuhr" class="Prayers">
+                <p>Zhuhr</p>
+                <p id="zuhr-time" class="times"></p>
+            </div>
+            <div id="asr" class="Prayers">
+                <p>Asr</p>
+                <p id="asr-time" class="times"></p>
+            </div>
+        </div>
+        <div id="main2">
+            <div id="maghrib" class="Prayers">
+                <p>Maghrib</p>
+                <p id="maghrib-time" class="times"></p>
+            </div>
+            <div id="isha" class="Prayers">
+                <p>Isha</p>
+                <p id="isha-time" class="times"></p>
+            </div>
+            <div id="Imsak" class="Prayers">
+                <p>Imsak</p>
+                <p id="imsak-time" class="times"></p>
+            </div>
+            <div id="sunset" class="Prayers">
+                <p>Sunset</p>
+                <p id="sunset-time" class="times"></p>
+            </div>
+        </div>
+    </div>
+
+
+    
+    <script>
+        function getData(){
+        let input = document.getElementById('city').value;
+
+        axios.get(`https://api.aladhan.com/v1/timingsByCity?city=${input}&country=pakistan&method=1`)
+        .then(function (response) {
+        const data = response.data;
+        console.log(data);
+        let fajr = data.data.timings.Fajr;
+        let sunrise = data.data.timings.Sunrise;
+        let dhuhr = data.data.timings.Dhuhr;
+        let asr = data.data.timings.Asr;
+        let maghrib = data.data.timings.Maghrib;
+        let isha = data.data.timings.Isha;
+        let imsak = data.data.timings.Imsak;
+        let sunset = data.data.timings.Sunset;
+
+
+        console.log(fajr, sunrise, dhuhr, asr, maghrib, isha, imsak, sunset);
+        let date = data.data.date.readable;
+
+        document.getElementById("fajr-time").innerHTML = fajr;
+        document.getElementById("sunrise-time").innerHTML = sunrise;
+        document.getElementById("zuhr-time").innerHTML = dhuhr;
+        document.getElementById("asr-time").innerHTML = asr;
+        document.getElementById("maghrib-time").innerHTML = maghrib;
+        document.getElementById("isha-time").innerHTML = isha;
+        document.getElementById("imsak-time").innerHTML = imsak;
+        document.getElementById("sunset-time").innerHTML = sunset;
+        document.getElementById("date").innerHTML = `Date : ${date}`;
+      })
+     }
+    </script>
+</body>
+</html>
